@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Form</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <!-- Add Custom CSS -->
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-container h2 {
+            text-align: center;
+        }
+
+        .form-container label {
+            font-weight: bold;
+        }
+
+        .form-container input[type="email"],
+        .form-container input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+
+        .form-container input[type="submit"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Vui Lòng Đăng Nhập</h2>
+        <form id="loginForm" action="/login" method="POST">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+
+            <input type="submit" value="Login" class="btn btn-primary">
+        </form>
+    </div>
+
+    <!-- Add Bootstrap JS (optional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function hashPassword(password) {
+            // Convert the password to a Uint8Array
+            var encoder = new TextEncoder();
+            var data = encoder.encode(password);
+
+            // Create a new instance of the SHA-256 algorithm
+            return crypto.subtle.digest("SHA-256", data)
+                .then(function (hashBuffer) {
+                    // Convert the hash buffer to a hexadecimal string representation
+                    var hashArray = Array.from(new Uint8Array(hashBuffer));
+                    var hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+                    return hashHex;
+                });
+        }
+
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            hashPassword(password)
+                .then(function (hashedPassword) {
+                    var data = {
+                        name: name,
+                        email: email,
+                        password: hashedPassword
+                    };
+
+                    fetch("http://127.0.0.1:808/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(function (response) {
+                            if (response.ok) {
+                                return response.json();
+                                window.location.href = "http://127.0.0.1:8081/getData";
+                            } else {
+                                throw new Error("Error!");
+                            }
+                        })
+                        .then(function (responseData) {
+                            const jwt = responseData.Result.Token;
+                            localStorage.setItem("token", jwt);
+                            window.location.href = "http://127.0.0.1:8081/getData";
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert("An error occurred during login.");
+                        });
+                });
+            });
+    </script>
+
+
+</body>
+
+</html>

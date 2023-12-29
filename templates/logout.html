@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trang web đã logout</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <style>
+    body {
+      padding: 40px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Trang web đã logout thành công</h1>
+    <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Bạn đã đăng xuất thành công.</p>
+        <input id="logout" type="submit" value="Đăng nhập lại" href="login.html" class="btn btn-primary">
+
+  </div>
+  <script>
+    // Add an event listener to the logout button
+    document.getElementById('logout').addEventListener('click', function (event) {
+        event.preventDefault();
+        window.location.href = "http://127.0.0.1:8081/login";
+    });
+</script>
+</body>
+</html>

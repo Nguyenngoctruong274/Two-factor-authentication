@@ -1,0 +1,3 @@
+Variables:
+  JWT_SECRET: dfgasdfbdasfkdghfkgdashfkdgshfkdgshfkdsfsdfsasdasd
+  TOKEN_MAXAGE: 1
